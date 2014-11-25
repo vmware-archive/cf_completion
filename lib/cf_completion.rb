@@ -6,19 +6,31 @@ module CfCompletion
   APP_COMMANDS= %w{ app push p scale delete d rename start st stop sp restart rs
     restage rg events files f logs env e set-env se unset-env stacks }
 
-  def self.complete(completion_word, completion_word_position, params)
-    command_name = command_name(completion_word_position, params)
+  def self.complete(completion)
 
-    if completion_word_position == CF_COMMAND_POSITION
-      puts list_commands(completion_word)
-    elsif APP_COMMANDS.include?(command_name) && completion_word_position == 2
-      puts list_apps(completion_word)
+    if completion[:word_position] == CF_COMMAND_POSITION
+      list_commands(completion[:word])
+    elsif in_app_name_completion_position?(completion)
+      list_apps(completion[:word])
     end
   end
 
-  def self.command_name(completion_word_position, params)
-    return '' unless completion_word_position > CF_COMMAND_POSITION
-    params[CF_COMMAND_POSITION]
+  def self.in_app_name_completion_position?(completion)
+    is_app_command?(completion) && completion[:word_position] == 2
+  end
+
+  def self.is_app_command?(completion)
+    command_name = command_name(completion)
+    APP_COMMANDS.include?(command_name)
+  end
+
+  def self.command_name(completion)
+    return '' unless is_command_complete?(completion)
+    completion[:params][CF_COMMAND_POSITION]
+  end
+
+  def self.is_command_complete?(completion)
+    completion[:word_position] > CF_COMMAND_POSITION
   end
 
   def self.list_commands(filter)

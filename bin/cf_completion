@@ -5,15 +5,22 @@ end
 
 require 'cf_completion'
 
+def completion_word_position(comp_line, comp_point)
+  position = comp_line[0, comp_point].split(" ").count - 1
+
+  if comp_line[comp_point-1] == " "
+    position + 1
+  else
+    position
+  end
+end
+
 comp_line = ENV['COMP_LINE']
-params = comp_line.split(' ')
 comp_point = ENV['COMP_POINT'].to_i
 
-completion_word_position = comp_line[0,comp_point].split(" ").count - 1
+params = comp_line.split(' ')
 
-if comp_line[comp_point-1] == " "
-  completion_word_position += 1
-end
+completion_word_position = completion_word_position(comp_line, comp_point)
 
 completion_word = params[completion_word_position]
 
@@ -23,4 +30,10 @@ if ENV['DEBUG_CF_COMPLETION']
   puts "Params: #{params.join(", ")}"
 end
 
-CfCompletion.complete(completion_word, completion_word_position, params)
+completion = {
+    word_position: completion_word_position,
+    word: completion_word,
+    params: params,
+}
+
+puts CfCompletion.complete(completion)

@@ -16,9 +16,19 @@ _cf_completion() {
   # to_be_echoed=$COMP_WORDS
   # _echo_array "${COMP_WORDS[@]}"
 
+  current_word=${COMP_WORDS[$COMP_CWORD]}
+  
+  if [ $COMP_CWORD -gt $_CF_COMMAND ]; then
+    command_name=${COMP_WORDS[$_CF_COMMAND]}
+    # echo "COMMAND: ${command_name}"
+  fi
+
   if [ $COMP_CWORD -eq $_CF_COMMAND ]; then
-    COMMAND_LIST=`ruby ${_COMPLETION_LOCATION}/list_commands.rb ${COMP_WORDS[$COMP_CWORD]}`
+    COMMAND_LIST=`ruby ${_COMPLETION_LOCATION}/list_commands.rb $current_word`
     COMPREPLY=( ${COMMAND_LIST} )
+  elif [[ "${command_name}" == "app" && $COMP_CWORD -eq 2 ]]; then
+    APP_LIST=`ruby ${_COMPLETION_LOCATION}/list_apps.rb $current_word`
+    COMPREPLY=( ${APP_LIST} )
   else
     COMPREPLY=()
   fi

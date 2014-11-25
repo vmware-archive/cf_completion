@@ -1,6 +1,8 @@
 _CF_COMMAND=1
 _COMPLETION_LOCATION="$HOME/workspace/cf_completion"
 
+_APP_COMMANDS=( app push p scale delete d rename start st stop sp restart rs restage rg events files f logs env e set-env se unset-env stacks )
+
 _echo_array() {
   echo "Array items and indexes:"
   local array=( "$@" )
@@ -26,7 +28,7 @@ _cf_completion() {
   if [ $COMP_CWORD -eq $_CF_COMMAND ]; then
     COMMAND_LIST=`ruby ${_COMPLETION_LOCATION}/list_commands.rb $current_word`
     COMPREPLY=( ${COMMAND_LIST} )
-  elif [[ "${command_name}" == "app" && $COMP_CWORD -eq 2 ]]; then
+  elif [[ " ${_APP_COMMANDS[*]} " == *" ${command_name} "* && $COMP_CWORD -eq 2 ]]; then
     APP_LIST=`ruby ${_COMPLETION_LOCATION}/list_apps.rb $current_word`
     COMPREPLY=( ${APP_LIST} )
   else

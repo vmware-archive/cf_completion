@@ -34,7 +34,7 @@ module CfCompletion
   end
 
   def self.list_commands(filter)
-    help_output = `cf help | sed -n '/^GETTING STARTED:/,/^ENVIRONMENT VARIABLES/p'`
+    help_output = `cf help`
 
     help_output.
         split("\n").

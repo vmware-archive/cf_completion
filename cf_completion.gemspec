@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["pair+squeedee+syeung@pivotal.io"]
   spec.summary       = %q{Bash completion for the Cloud Foundry CLI}
   spec.description   = %q{Bash completion for the Cloud Foundry CLI}
-  spec.homepage      = "https://github.com/bonfilsd/cf_completion"
+  spec.homepage      = "https://github.com/cf-buildpacks/cf_completion"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

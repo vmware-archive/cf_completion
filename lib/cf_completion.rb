@@ -34,7 +34,13 @@ module CfCompletion
   end
 
   def self.list_commands(filter)
-    help_output = `cf help | sed -n '/^GETTING STARTED:/,/^ENVIRONMENT VARIABLES/p'`
+    cmd = `cf --version`.split()[2][0..3].sub!('.', '')
+    if cmd >= "622"
+      help_output = `cf help -a`
+    else
+      # help_output = `cf help | sed -n '/^GETTING STARTED:/,/^ENVIRONMENT VARIABLES/p'`
+      help_output = `cf help`
+    end
 
     help_output.
         split("\n").
